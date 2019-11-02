@@ -1,0 +1,14 @@
+//资源更新模式 0 Res  1 AB  见 EM_LoadMode 
+AssetLoadMode::0
+
+//最大存在于内存中的AssetBundle个数
+MaxAssetBundleCount::25
+
+//不要打包的文件后缀
+DontPack::.meta;.cs
+
+//服务端资源路径
+HttpUrl::127.0.0.1
+
+//更新模式
+UpdateMode::0

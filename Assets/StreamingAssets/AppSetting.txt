@@ -16,8 +16,5 @@ UpdateMode:0
 //是否输出日志
 IsDebug:1
 
-//资源释放时间（秒）
-ReleaseSecond:0
-
-//检查资源释放时间（秒）
-ReleaseUnuseSecond:1000
+//资源释放时间(秒)
+ReleaseSecond:60

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 
 public class AppSetting
@@ -74,7 +76,11 @@ public class AppSetting
     {
         try
         {
+#if UNITY_EDITOR
             string content = Resources.Load<TextAsset>("AppSetting").text;
+#else
+            string content = new StreamReader(PathHelper.AssetBundlePath + "/AppSetting.txt",Encoding.UTF8).ReadToEnd();
+#endif
             string[] settings = content.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var item in settings)
             {
@@ -96,13 +102,17 @@ public class AppSetting
     {
         try
         {
+#if UNITY_EDITOR
             string content = Resources.Load<TextAsset>("AppSetting").text;
+#else
+            string content = new StreamReader(PathHelper.AssetBundlePath + "/AppSetting.txt",Encoding.UTF8).ReadToEnd();
+#endif
             string[] settings = content.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var item in settings)
             {
                 if (item.StartsWith("//")) { continue; }
 
-                string[] item2 = item.Split(new string[] { "::" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] item2 = item.Split(new char[] {':'},2,StringSplitOptions.RemoveEmptyEntries);
                 if (item2.Length == 2)
                 {
                     Settings[item2[0]] = item2[1];

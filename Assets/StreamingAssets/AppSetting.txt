@@ -7,6 +7,9 @@ MaxAssetBundleCount:25
 //不要打包的文件后缀
 DontPack:.meta;.cs
 
+//打包资源文件夹
+AssetPath:Assets/YResources
+
 //服务端资源路径
 HttpUrl:127.0.0.1
 

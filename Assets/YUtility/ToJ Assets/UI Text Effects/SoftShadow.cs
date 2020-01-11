@@ -69,16 +69,10 @@ public class SoftShadow : Shadow
 		Text textComponent = GetComponent<Text>();
 
 		List<UIVertex> neededVerts = new List<UIVertex>();
-		if (onlyInitialCharactersDropShadow)
-		{
-			neededVerts = verts.GetRange(initialVertexCount - textComponent.cachedTextGenerator.characterCountVisible * 6, textComponent.cachedTextGenerator.characterCountVisible * 6);
-		}
-		else
-		{
-			neededVerts = verts;
-		}
 
-		Color effectColorEdited = effectColor;
+        neededVerts = verts;
+
+        Color effectColorEdited = effectColor;
 		effectColorEdited.a /= 4;
 
 		var start = 0;

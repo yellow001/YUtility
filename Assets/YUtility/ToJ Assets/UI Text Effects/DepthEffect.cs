@@ -163,14 +163,14 @@ public class DepthEffect : BaseMeshEffect
 		Text textComponent = GetComponent<Text>();
 
 		List<UIVertex> neededVerts = new List<UIVertex>();
-		if (m_OnlyInitialCharactersGenerateDepth)
-		{
-			neededVerts = verts.GetRange(verts.Count - textComponent.cachedTextGenerator.characterCountVisible * 6, textComponent.cachedTextGenerator.characterCountVisible * 6);
-		}
-		else
-		{
+		//if (m_OnlyInitialCharactersGenerateDepth)
+		//{
+		//	neededVerts = verts.GetRange(verts.Count - textComponent.cachedTextGenerator.characterCountVisible * 6, textComponent.cachedTextGenerator.characterCountVisible * 6);
+		//}
+		//else
+		//{
 			neededVerts = verts;
-		}
+		//}
 
 		if (neededVerts.Count == 0)
 		{

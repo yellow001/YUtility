@@ -9,7 +9,7 @@ public static class ValueChangeExtend
     {
         float temp = src;
         float offset = dst - src;
-        EventMgr.Ins.AddTimeEvent(duration, callback, (t, p) => {
+        EventMgr.Ins.AddTimeEventEx(duration, callback, (t, p) => {
             if (curve != null && curve.length > 0)
             {
                 p = curve.Evaluate(p);
@@ -23,7 +23,7 @@ public static class ValueChangeExtend
     {
         Vector2 temp = src;
         Vector2 offset = dst - src;
-        EventMgr.Ins.AddTimeEvent(duration, callback, (t, p) => {
+        EventMgr.Ins.AddTimeEventEx(duration, callback, (t, p) => {
             if (curve != null && curve.length > 0)
             {
                 p = curve.Evaluate(p);
@@ -37,7 +37,7 @@ public static class ValueChangeExtend
     {
         Vector3 temp = src;
         Vector3 offset = dst - src;
-        EventMgr.Ins.AddTimeEvent(duration, callback, (t, p) => {
+        EventMgr.Ins.AddTimeEventEx(duration, callback, (t, p) => {
             if (curve != null && curve.length > 0)
             {
                 p = curve.Evaluate(p);
@@ -51,7 +51,7 @@ public static class ValueChangeExtend
     {
         Color temp = src;
         Color offset = dst - src;
-        EventMgr.Ins.AddTimeEvent(duration, callback, (t, p) => {
+        EventMgr.Ins.AddTimeEventEx(duration, callback, (t, p) => {
             if (curve != null && curve.length > 0)
             {
                 p = curve.Evaluate(p);

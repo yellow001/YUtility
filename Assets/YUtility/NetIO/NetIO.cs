@@ -6,29 +6,28 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
-namespace NetFrame {
-    public class NetIO {
+namespace NetFrame
+{
+    public class NetIO
+    {
         private static NetIO ins;
 
         public static NetIO Ins {
             get {
-                if (ins == null) {
-                    ins = new NetIO(V_IP,V_Port);
-
-                    TransModel model = new TransModel();
-                    model.SetMsg(Convert.ToBase64String(Encoding.UTF8.GetBytes(V_ConnectKey)));
-                    ins.Send(model);
+                if (ins == null)
+                {
+                    ins = new NetIO();
                 }
                 return ins;
             }
         }
-        
+
         Socket socket;
 
         /// <summary>
         /// socket接收数据时用到的缓冲区
         /// </summary>
-        byte[] readBuffer = new byte[1042];
+        byte[] readBuffer = new byte[1024];
 
         //处理数据的缓冲区
         List<byte> cache = new List<byte>();
@@ -38,38 +37,53 @@ namespace NetFrame {
 
         bool isWrite, isRead;
 
-        public List<TransModel> msg=new List<TransModel>();
+        public List<TransModel> msg = new List<TransModel>();
 
         public static string V_IP;
         public static int V_Port;
 
         public static string V_ConnectKey;
 
-        private NetIO(string ip,int port) {
-            try {
+        public void Connect()
+        {
+            try
+            {
 
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 AbsCoding.Ins = new PbCoding();
 
-                socket.Connect(ip,port);
+                socket.Connect(V_IP, V_Port);
 
                 socket.BeginReceive(readBuffer, 0, 1024, SocketFlags.None, ReceiveCallBack, null);
+
+                TransModel model = new TransModel();
+                if (!string.IsNullOrEmpty(V_ConnectKey))
+                {
+                    model.SetMsg(Convert.ToBase64String(Encoding.UTF8.GetBytes(V_ConnectKey)));
+                }
+                ins.Send(model);
+
+                //EventMgr.Ins.InvokeDeList(EM_LoginEvent.ConnectSuccess);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
+                //EventMgr.Ins.InvokeDeList(EM_LoginEvent.ConnectFail);
                 Debug.Log("无法连接服务器，请重启客户端或联系服务器管理员");
                 //AlertMgr.Ins.AddMsg("无法连接服务器，请重启客户端或联系服务器管理员");
             }
         }
 
-        void ReceiveCallBack(IAsyncResult result) {
+        void ReceiveCallBack(IAsyncResult result)
+        {
             int length = socket.EndReceive(result);
             byte[] data = new byte[length];
             Buffer.BlockCopy(readBuffer, 0, data, 0, length);
 
             cache.AddRange(data);
 
-            if (!isRead) {
+            if (!isRead)
+            {
                 isRead = true;
                 Read();
             }
@@ -80,10 +94,12 @@ namespace NetFrame {
         /// <summary>
         /// 对缓冲区数据进行处理
         /// </summary>
-        void Read() {
+        void Read()
+        {
 
             TransModel model = AbsCoding.Ins.ModelDecoding<TransModel>(ref cache);
-            if (model == null) {
+            if (model == null)
+            {
                 isRead = false;
                 return;
             }
@@ -99,11 +115,13 @@ namespace NetFrame {
             Read();
         }
 
-        public void Send(TransModel model) {
+        public void Send(TransModel model)
+        {
 
             write_queue.Enqueue(model);
 
-            if (!isWrite) {
+            if (!isWrite)
+            {
                 isWrite = true;
                 Write();
             }
@@ -116,8 +134,10 @@ namespace NetFrame {
         }
 
 
-        public void Write() {
-            if (write_queue.Count == 0) {
+        public void Write()
+        {
+            if (write_queue.Count == 0)
+            {
                 isWrite = false;
                 return;
             }
@@ -127,16 +147,19 @@ namespace NetFrame {
 
             byte[] queue = AbsCoding.Ins.ModelEncoding(m);
 
-            if (queue == null) {
+            if (queue == null)
+            {
                 isWrite = false;
                 return;
             }
 
-            try {
+            try
+            {
                 socket.BeginSend(queue, 0, queue.Length, SocketFlags.None, SendCallBack, null);
             }
-            catch (Exception ex) {
-
+            catch (Exception ex)
+            {
+                Debug.Log(ex.ToString());
             }
 
         }
@@ -145,7 +168,8 @@ namespace NetFrame {
         /// 发送数据
         /// </summary>
         /// <param name="result"></param>
-        void SendCallBack(IAsyncResult result) {
+        void SendCallBack(IAsyncResult result)
+        {
             socket.EndSend(result);
             Write();
         }

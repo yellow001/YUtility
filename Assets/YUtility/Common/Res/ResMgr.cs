@@ -31,7 +31,7 @@ public class ResMgr : InsManager<ResMgr>
 
         SceneManager.sceneUnloaded += OnSecneUnload;
 
-        this.AddTimeEvent(100, () => CheckAndReleaseAssetBundle(),-1);
+        this.AddTimeEventEx(100, () => CheckAndReleaseAssetBundle(),-1);
 
         base.Init();
     }

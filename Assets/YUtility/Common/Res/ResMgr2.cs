@@ -32,7 +32,7 @@ public class ResMgr2 : InsManager<ResMgr2>
 
         SceneManager.sceneUnloaded += OnSecneUnload;
 
-        this.AddTimeEvent(m_releaseUnuseAssetTime, () => Clear(), -1);
+        this.AddTimeEventEx(m_releaseUnuseAssetTime, () => Clear(), -1);
 
         base.Init();
     }

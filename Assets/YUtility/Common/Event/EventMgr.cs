@@ -11,32 +11,35 @@ public class EventMgr : InsManager<EventMgr>
 
     int m_EventIndex = 0;
 
+    Dictionary<int, TimeEvent> tEvents_up_temp = new Dictionary<int, TimeEvent>();
     Dictionary<int, TimeEvent> tEvents_up = new Dictionary<int, TimeEvent>();
     List<int> rmTEvents_up = new List<int>();
 
+    Dictionary<int, TimeEvent> tEvents_fix_temp = new Dictionary<int, TimeEvent>();
     Dictionary<int, TimeEvent> tEvents_fix = new Dictionary<int, TimeEvent>();
     List<int> rmTEvents_fix = new List<int>();
 
+    Dictionary<int, TimeEvent> tEvents_late_temp = new Dictionary<int, TimeEvent>();
     Dictionary<int, TimeEvent> tEvents_late = new Dictionary<int, TimeEvent>();
     List<int> rmTEvents_late = new List<int>();
 
     // Update is called once per frame
     void Update()
     {
-        ExcuteTimeEvent(tEvents_up, rmTEvents_up);
+        ExcuteTimeEvent(tEvents_up, tEvents_up_temp, rmTEvents_up);
     }
 
     private void FixedUpdate()
     {
-        ExcuteTimeEvent(tEvents_fix, rmTEvents_fix);
+        ExcuteTimeEvent(tEvents_fix, tEvents_fix_temp,rmTEvents_fix);
     }
 
     private void LateUpdate()
     {
-        ExcuteTimeEvent(tEvents_late, rmTEvents_late);
+        ExcuteTimeEvent(tEvents_late, tEvents_late_temp,rmTEvents_late);
     }
 
-    public void ExcuteTimeEvent(Dictionary<int, TimeEvent> eventDic, List<int> rmList)
+    public void ExcuteTimeEvent(Dictionary<int, TimeEvent> eventDic, Dictionary<int, TimeEvent> eventDicTemp, List<int> rmList)
     {
         if (rmList != null && rmList.Count > 0)
         {
@@ -49,6 +52,14 @@ public class EventMgr : InsManager<EventMgr>
             }
             rmList.Clear();
         }
+
+        if (eventDicTemp != null && eventDicTemp.Count > 0) {
+            foreach (var item in eventDicTemp.Keys)
+            {
+                eventDic[item] = eventDicTemp[item];
+            }
+        }
+        eventDicTemp.Clear();
 
         if (eventDic != null && eventDic.Count > 0)
         {
@@ -142,13 +153,13 @@ public class EventMgr : InsManager<EventMgr>
         switch (m)
         {
             case TimeEventUpdateMode.Update:
-                tEvents_up.Add(m_EventIndex, model);
+                tEvents_up_temp.Add(m_EventIndex, model);
                 break;
             case TimeEventUpdateMode.FixedUpdate:
-                tEvents_fix.Add(m_EventIndex, model);
+                tEvents_fix_temp.Add(m_EventIndex, model);
                 break;
             case TimeEventUpdateMode.LateUpdate:
-                tEvents_late.Add(m_EventIndex, model);
+                tEvents_late_temp.Add(m_EventIndex, model);
                 break;
             default:
                 break;
